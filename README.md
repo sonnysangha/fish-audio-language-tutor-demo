@@ -39,6 +39,10 @@ Use your own Fish Audio account. Agent conversations and some models require ava
 
 After installing the project and adding your API key, choose the appropriate setup:
 
+**The two setup scripts below are custom helpers written for this project, not official Fish Audio commands.** They automate the steps in Fish Audio's [Agents quickstart](https://docs.fish.audio/agents/quickstart): create an agent, configure it and publish it. They call the documented Fish Audio APIs and save the resulting IDs to `.env.local` for you. The tutor prompts, model choices, privacy settings and three-agent arrangement are this app's configuration.
+
+You can either run these helpers or perform the same setup yourself in the Fish Audio dashboard or through its API. The scripts are a convenience, not a requirement of Fish Audio.
+
 | What you want to use | Agent setup commands | Required environment values |
 | --- | --- | --- |
 | **Standalone text-to-speech (TTS)** from text you supply | None | `FISH_AUDIO_API_KEY` |
@@ -73,6 +77,17 @@ node scripts/setup-native-voice.mjs
 The first command sets up the text agent described above. The second creates and publishes two private voice agents: one using **S2.1 Pro** and one using **Drama 3**. It saves `FISH_AUDIO_NATIVE_AGENT_ID` and `FISH_AUDIO_DRAMA_AGENT_ID` in `.env.local` without printing credentials. Continuous chat uses the selected voice agent for the live conversation and the text agent for on-screen meanings and suggestions.
 
 These are reusable configurations in your Fish Audio account, not new agents created for every conversation. **Publishing activates their configuration; they remain private.** Normally you run setup once. If an agent identifier is already present, setup reuses that agent and may update its configuration. Use agents dedicated to this project. Native setup stops when it detects unpublished configuration changes rather than overwriting those changes.
+
+#### Manual alternative: follow the Fish Audio quickstart yourself
+
+If you prefer to manage the agents manually, skip the setup scripts:
+
+1. Follow the [official Agents quickstart](https://docs.fish.audio/agents/quickstart) to create the agents needed for your chosen features: one text agent for translation/guided replies, plus the two voice variants if you want both Continuous chat models.
+2. Apply the matching configuration from [`setup-fish-agent.mjs`](scripts/setup-fish-agent.mjs) and [`setup-native-voice.mjs`](scripts/setup-native-voice.mjs). Include the prompts, first-message behavior, speech/recognition models, privacy settings and allowed session overrides. An arbitrary default agent will not necessarily behave as this app expects.
+3. Keep the agents private and [publish their configurations](https://docs.fish.audio/agents/deploy/versions-publishing).
+4. Copy their IDs into the corresponding `.env.local` variables listed below, then start or restart the app. You do not need to run the helpers after completing equivalent manual setup.
+
+During normal use, the app connects through Fish Audio's official SDKs and documented [private-session flow](https://docs.fish.audio/agents/deploy/authenticated-sessions). The setup scripts only prepare the reusable agents; they do not run each conversation.
 
 ### 4. Start the app
 
