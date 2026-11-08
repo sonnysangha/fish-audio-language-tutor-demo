@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, LoaderCircle, Mic, Square, X } from "lucide-react";
 import { TranslationResult } from "@/components/translation-result";
 import type { RecorderState } from "@/components/use-recorder";
@@ -85,6 +85,15 @@ export function TranslateWorkspace({ sourceLanguage, targetLanguage, tutor, voic
   onCancel, translation, busy, recorderState, disabled, speechReady, active, audioState, onListen, onStop,
 }: TranslateWorkspaceProps) {
   const id = useId();
+  const sourceInput = useRef<HTMLTextAreaElement>(null);
+  const sourceHighlight = useRef<HTMLDivElement>(null);
+  const syncSourceScroll = () => {
+    if (sourceInput.current && sourceHighlight.current) {
+      sourceHighlight.current.scrollTop = sourceInput.current.scrollTop;
+      sourceHighlight.current.scrollLeft = sourceInput.current.scrollLeft;
+    }
+  };
+  useLayoutEffect(syncSourceScroll, [sourceText]);
   const recording = recorderState === "recording";
   const starting = recorderState === "starting";
   const transcribing = recorderState === "transcribing";
@@ -114,8 +123,15 @@ export function TranslateWorkspace({ sourceLanguage, targetLanguage, tutor, voic
       </div>
 
       <label className="sr-only" htmlFor={id + "-source-text"}>Text to translate</label>
-      <textarea id={id + "-source-text"} className="tw-source-text" lang={sourceLanguage} dir="auto"
+      <div className="tw-source-editor">
+      <div ref={sourceHighlight} className="tw-source-highlight" lang={sourceLanguage} dir="auto" aria-hidden="true">
+        {sourceText.split(/(\[[^\]\r\n]+\])/g).map((part, index) => index % 2
+          ? <span className="emotion-token" data-emotion={part.slice(1, -1).trim().toLowerCase()} key={index}>{part}</span>
+          : part)}{sourceText.endsWith("\n") ? "\n" : ""}
+      </div>
+      <textarea ref={sourceInput} id={id + "-source-text"} className="tw-source-text" lang={sourceLanguage} dir="auto"
         value={sourceText} maxLength={MAX_TEXT_LENGTH} disabled={working}
+        onScroll={syncSourceScroll}
         aria-describedby={id + "-input-hint" + (sourceText && validation ? " " + id + "-input-error" : "")}
         aria-invalid={!!sourceText && !!validation} placeholder="Type or speak something to translate…"
         onChange={(event) => { onStop(); onSourceTextChange(event.target.value); }}
@@ -125,6 +141,7 @@ export function TranslateWorkspace({ sourceLanguage, targetLanguage, tutor, voic
             submit();
           }
         }} />
+      </div>
 
       <TranslationExamples key={sourceLanguage} language={sourceLanguage} disabled={working || disabled}
         onSelect={(text) => { onStop(); onExampleSelect(text); }} />

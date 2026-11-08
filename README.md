@@ -5,10 +5,12 @@
 ## What you can try
 
 - **Conversation (turns):** choose a language, topic, difficulty and guide. Type or record a reply, receive a correction when needed, and practise with suggested answers.
-- **Translate:** type or speak a phrase, translate it, edit inline delivery cues and listen. Press **Enter** to translate or **Shift+Enter** for a new line.
+- **Translate:** type or speak a phrase, translate it, edit inline delivery cues and listen. Bracketed cues are highlighted while you type and in the translated result. Press **Enter** to translate or **Shift+Enter** for a new line.
 - **Continuous chat:** keep a Fish Agent voice session connected while you talk. Pause the microphone or end the session at any time. English meanings and suggested replies are generated alongside the conversation.
 
 The app includes Spanish, French, Italian, German, Portuguese, Japanese, Korean, Mandarin, Arabic and English. Maya and Leo are guide personas; each language uses a corresponding public Fish Audio voice.
+
+Use the sun/moon button in the header to switch between light and dark mode. The app initially follows your system theme and remembers a manual choice in your browser.
 
 ## Run locally
 

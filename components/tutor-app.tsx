@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   ArrowLeft, ArrowRight, AudioLines,
   LoaderCircle, Mic, RefreshCw, Send, SlidersHorizontal,
@@ -611,6 +612,7 @@ export default function TutorApp() {
           <button className={tab === "continuous" ? "active" : ""} aria-pressed={tab === "continuous"} onClick={() => changeTab("continuous")}>Continuous chat</button>
         </nav>
         <div className="header-actions">
+          <ThemeToggle />
           <SpeechModelSelect key={continuousChat ? "native" : "standard"} value={speechModel}
             allowedModels={continuousChat ? nativeSpeechModels : undefined} disabled={working || recording}
             onChange={(next) => { if (continuousChat) changeContext(); else { speech.stop(); setPlayingMessage(null); } setSpeechModel(next); }} />
